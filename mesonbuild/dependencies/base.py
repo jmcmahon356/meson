@@ -638,14 +638,14 @@ class PkgConfigDependency(ExternalDependency):
         extra_paths = self.env.coredata.builtins_per_machine[self.for_machine]['pkg_config_path'].value
         sysroot = self.env.properties[self.for_machine].get_sys_root()
         if sysroot:
-            env['PKG_CONFIG_SYSROOT_DIR'] = sysroot
-        new_pkg_config_path = ':'.join([p for p in extra_paths])
+            env['PKG_CONFIG_SYSROOT_DIR'] = os.path.expanduser(sysroot)
+        new_pkg_config_path = ':'.join([os.path.expanduser(p) for p in extra_paths])
         mlog.debug('PKG_CONFIG_PATH: ' + new_pkg_config_path)
         env['PKG_CONFIG_PATH'] = new_pkg_config_path
 
         pkg_config_libdir_prop = self.env.properties[self.for_machine].get_pkg_config_libdir()
         if pkg_config_libdir_prop:
-            new_pkg_config_libdir = ':'.join([p for p in pkg_config_libdir_prop])
+            new_pkg_config_libdir = ':'.join([os.path.expanduser(p) for p in pkg_config_libdir_prop])
             env['PKG_CONFIG_LIBDIR'] = new_pkg_config_libdir
             mlog.debug('PKG_CONFIG_LIBDIR: ' + new_pkg_config_libdir)
 
